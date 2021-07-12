@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -15,21 +16,27 @@ public class UserServiceTest {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final UserService userService;
 
-    public UserServiceTest(@Autowired UserRepository userRepository,@Autowired ProductRepository productRepository) {
+    @Autowired
+    public UserServiceTest(UserRepository userRepository,
+                           ProductRepository productRepository,
+                           UserService userService) {
+
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.userService = userService;
     }
 
     @Test
-    public void findById() throws InterruptedException {
+    public void findById() {
         //Given
         User user=new User();
         user.setEmail("t@t.com1");
         user.setFullName("Talha Toprak");
         userRepository.save(user);
-        Thread.sleep(50);
         System.out.println("userServiceTest:findById");
+
         //When
         User user1 = userRepository.findById(user.getId()).orElse(null);
 
@@ -42,16 +49,27 @@ public class UserServiceTest {
         //Given
         User user = new User("y@y.com","Yavuz Bilgin");
         userRepository.save(user);
-        Thread.sleep(50);
 
-        Product product=new Product("BR002","desc2",3,3.3);
+        Product product = new Product("BR002","desc2",3,3.3);
         productRepository.save(product);
 
-        user.followProduct(product.getId());
-        userRepository.save(user);
+        //When
+        User foundUser = userService.subscribeToProduct(user.getId(), product.getId());
 
-        User user1=userRepository.findById(user.getId()).orElse(null);
+        //Then
+        assertTrue(foundUser.getFollowedProducts().contains(product.getId()));
+    }
 
-        assertEquals(user1.getFollowedProducts().contains(product.getId()),true);
+    @Test
+    public void createUser() {
+        //Given
+        User user = new User("y@y.com","Yavuz Bilgin");
+
+        //When
+        User savedUser = userService.createUser(user);
+        User foundUser = userRepository.findById(savedUser.getId()).orElseThrow();
+
+        //Then
+        assertEquals(savedUser.getEmail(), foundUser.getEmail());
     }
 }

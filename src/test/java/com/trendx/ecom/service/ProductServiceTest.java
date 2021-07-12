@@ -12,25 +12,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProductServiceTest {
 
     private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductServiceTest(@Autowired ProductRepository productRepository) {
+    @Autowired
+    public ProductServiceTest(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     @Test
     public void findById() throws InterruptedException {
         //Given
-        Product product= new Product();
+        Product product = new Product();
         product.setBarcode("BR01");
         product.setDescription("Tshirt");
         product.setMobileSalesPrice(5.5);
         product.setSalesPrice(5);
 
         productRepository.save(product);
-        Thread.sleep(50);
         System.out.println("userServiceTest:findById");
         //When
-        Product product1 = productRepository.findById(product.getId()).orElse(null);
+        Product product1 = productService.findById(product.getId());
 
         //Then
         assertEquals("BR01", product1.getBarcode());

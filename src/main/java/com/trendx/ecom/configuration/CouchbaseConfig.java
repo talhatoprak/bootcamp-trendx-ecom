@@ -26,4 +26,8 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
         return "ecom";
     }
 
+    @Override
+    protected boolean autoIndexCreation() {
+        return true;
+    }
 }

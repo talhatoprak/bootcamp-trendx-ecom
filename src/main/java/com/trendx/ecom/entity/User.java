@@ -1,5 +1,6 @@
 package com.trendx.ecom.entity;
 
+import org.springframework.data.couchbase.core.index.QueryIndexed;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Field;
@@ -14,12 +15,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
     private String id;
+    @QueryIndexed
     @Field
     private String email;
     @Field
     private String fullName;
     @Field
-    private List<String> followedProducts=new ArrayList<>();
+    private List<String> followedProducts = new ArrayList<>();
 
     public User(String email, String fullName) {
         this.email = email;
