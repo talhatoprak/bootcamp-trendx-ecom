@@ -42,4 +42,9 @@ public class ProductService {
         product.setSalesPrice(webPrice);
         productRepository.save(product);
     }
+
+    public  void deleteById(String id)
+    {
+        productRepository.deleteById(id);
+    }
 }

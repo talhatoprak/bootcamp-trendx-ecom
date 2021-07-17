@@ -63,4 +63,14 @@ public class User {
     public void followProduct(String productId) {
         this.followedProducts.add(productId);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", followedProducts=" + followedProducts +
+                '}';
+    }
 }

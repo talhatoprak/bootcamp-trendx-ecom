@@ -71,4 +71,15 @@ public class Product {
     public void setMobileSalesPrice(double mobileSalesPrice) {
         this.mobileSalesPrice = mobileSalesPrice;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", description='" + description + '\'' +
+                ", salesPrice=" + salesPrice +
+                ", mobileSalesPrice=" + mobileSalesPrice +
+                '}';
+    }
 }
