@@ -1,7 +1,7 @@
-package com.trendx.ecom.controller;
+package com.trendx.ecom.product.controller;
 
-import com.trendx.ecom.entity.Product;
-import com.trendx.ecom.service.ProductService;
+import com.trendx.ecom.product.entity.Product;
+import com.trendx.ecom.product.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

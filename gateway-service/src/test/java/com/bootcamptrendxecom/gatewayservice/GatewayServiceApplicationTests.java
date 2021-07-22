@@ -1,10 +1,10 @@
-package com.trendx.ecom;
+package com.bootcamptrendxecom.gatewayservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EcomApplicationTests {
+class GatewayServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,12 +1,13 @@
-package com.trendx.ecom.entity;
+package com.trendx.ecom.product.entity;
 
-import org.springframework.data.couchbase.core.mapping.Document;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.index.QueryIndexed;
+import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
-
 
 @Document
 public class Product {
@@ -14,6 +15,7 @@ public class Product {
     @GeneratedValue(strategy = UNIQUE)
     private String id;
     @Field
+    @QueryIndexed
     private String barcode;
     @Field
     private String description;

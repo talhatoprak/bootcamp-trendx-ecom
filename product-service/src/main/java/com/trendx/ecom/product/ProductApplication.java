@@ -1,14 +1,13 @@
-package com.trendx.ecom;
+package com.trendx.ecom.product;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EcomApplication {
+public class ProductApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EcomApplication.class, args);
-		System.out.println("hello");
+		SpringApplication.run(ProductApplication.class, args);
 	}
 
 }

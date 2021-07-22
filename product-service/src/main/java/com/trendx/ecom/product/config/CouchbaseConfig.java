@@ -1,8 +1,7 @@
-package com.trendx.ecom.configuration;
+package com.trendx.ecom.product.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
-import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 
 @Configuration
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
