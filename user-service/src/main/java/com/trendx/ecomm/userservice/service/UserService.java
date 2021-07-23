@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final KafkaService kafkaService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, KafkaService kafkaService) {
         this.userRepository = userRepository;
+        this.kafkaService = kafkaService;
     }
 
     public User findById(Long id) {
@@ -26,11 +28,13 @@ public class UserService {
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+        kafkaService.sendMessage(id.toString(),"deleteUser");
     }
 
     public User updateUser(User user) {
         Long userId = user.getId();
         this.findById(userId);
+        //Todo: test edilecek.
         return userRepository.save(user);
     }
 

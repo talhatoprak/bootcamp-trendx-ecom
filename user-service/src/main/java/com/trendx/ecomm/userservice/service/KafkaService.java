@@ -1,7 +1,5 @@
-package com.trendx.ecom.product.service;
+package com.trendx.ecomm.userservice.service;
 
-import com.trendx.ecom.product.kafkamodel.PriceChangeModel;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +17,6 @@ public class KafkaService {
     }
 
     public void sendMessage(Object msg,String topic){
-        kafkaTemplate.send(topic, msg);
-    }
-    public void sendChangePriceMessage(PriceChangeModel msg, String topic){
         kafkaTemplate.send(topic, msg);
     }
 }
