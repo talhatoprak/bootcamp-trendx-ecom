@@ -48,7 +48,7 @@ public class ProductService {
         product.setMobileSalesPrice(mobilePrice);
         productRepository.save(product);
         PriceChangeModel changeModel=new PriceChangeModel(productId,"mobile",oldPrice,mobilePrice);
-        kafkaService.sendMessage(changeModel, "changeSalesPrice");
+        kafkaService.sendChangePriceMessage(changeModel, "changeSalesPrice");
     }
 
     public void changeWebSalesPrice(String productId, double webPrice) {
@@ -58,7 +58,7 @@ public class ProductService {
         product.setSalesPrice(webPrice);
         productRepository.save(product);
         PriceChangeModel changeModel=new PriceChangeModel(productId,"web",oldPrice,webPrice);
-        kafkaService.sendMessage(changeModel, "changeSalesPrice");
+        kafkaService.sendChangePriceMessage(changeModel, "changeSalesPrice");
     }
 
     public void deleteById(String id) {

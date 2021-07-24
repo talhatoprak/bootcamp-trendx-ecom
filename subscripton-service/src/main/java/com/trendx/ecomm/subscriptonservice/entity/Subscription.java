@@ -1,6 +1,7 @@
 package com.trendx.ecomm.subscriptonservice.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.index.QueryIndexed;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
@@ -9,37 +10,50 @@ import java.util.Set;
 @Document
 public class Subscription {
     @Id
-    private final String userId;
+    private final String productId;
 
     @Field
-    private final Set<Long> followedProductIds;
+    private final Set<String> followerUserIds;
+    @Field
+    @QueryIndexed
+    private boolean isDeleted;
 
-    public Subscription(String userId, Set<Long> followedProductIds) {
-        this.userId = userId;
-        this.followedProductIds = followedProductIds;
+    public Subscription(String productId, Set<String> followerUserIds) {
+        this.productId = productId;
+        this.followerUserIds = followerUserIds;
+        this.isDeleted=false;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getProductId() {
+        return productId;
     }
 
-    public Set<Long> getFollowedProductIds() {
-        return followedProductIds;
+    public Set<String> getFollowerUserIds() {
+        return followerUserIds;
     }
 
-    public void followProduct(Long productId) {
-        followedProductIds.add(productId);
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void unfollowProduct(Long productId) {
-        followedProductIds.remove(productId);
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public void followProduct(String userId) {
+        followerUserIds.add(userId);
+    }
+
+    public void unfollowProduct(String userId) {
+        followerUserIds.remove(userId);
     }
 
     @Override
     public String toString() {
         return "Subscription{" +
-            "userId='" + userId + '\'' +
-            ", followedProductIds=" + followedProductIds +
-            '}';
+                "productId='" + productId + '\'' +
+                ", followerUserIds=" + followerUserIds +
+                ", isDeleted=" + isDeleted +
+                '}';
     }
 }
