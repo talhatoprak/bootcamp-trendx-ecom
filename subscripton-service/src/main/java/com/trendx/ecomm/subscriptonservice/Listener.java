@@ -18,7 +18,7 @@ public class Listener {
     public void listen(String msg) {
         System.out.println(msg);
         String[] data = msg.split(":");
-        Subscription savedSubscription = subscriptionService.followProduct(data[0], Long.parseLong(data[1]));
+        Subscription savedSubscription = subscriptionService.followProduct(data[0], data[1]);
         System.out.println(msg);
         System.out.println(savedSubscription);
     }
@@ -30,6 +30,8 @@ public class Listener {
 
     @KafkaListener(topics = "changeSalesPrice", groupId = "group-id", containerFactory = "kafkaListenerContainerFactory")
     public void listenChangeSalesPrice(PriceChangeModel model) {
+        //getUsersByProductId
+        //sendNotification(user)
         System.out.println(model);
     }
 }
