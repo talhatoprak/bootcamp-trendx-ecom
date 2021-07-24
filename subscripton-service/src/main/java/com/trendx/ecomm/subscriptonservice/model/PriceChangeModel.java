@@ -1,20 +1,10 @@
 package com.trendx.ecomm.subscriptonservice.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-//@JsonDeserialize(using = ItemDeserializer.class)
 public class PriceChangeModel {
     private String productId;
     private String platform;
     private double oldPrice;
     private double newPrice;
-
-    public PriceChangeModel(String productId, String platform, double oldPrice, double newPrice) {
-        this.productId = productId;
-        this.platform = platform;
-        this.oldPrice = oldPrice;
-        this.newPrice = newPrice;
-    }
 
     public String getProductId() {
         return productId;
@@ -46,5 +36,15 @@ public class PriceChangeModel {
 
     public void setNewPrice(double newPrice) {
         this.newPrice = newPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "PriceChangeModel{" +
+            "productId='" + productId + '\'' +
+            ", platform='" + platform + '\'' +
+            ", oldPrice=" + oldPrice +
+            ", newPrice=" + newPrice +
+            '}';
     }
 }

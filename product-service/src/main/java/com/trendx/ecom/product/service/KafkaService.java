@@ -13,14 +13,10 @@ public class KafkaService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-
-    public void sendMessage(String msg,String topic){
+    public void sendMessage(String msg, String topic){
         kafkaTemplate.send(topic, msg);
     }
 
-    public void sendMessage(Object msg,String topic){
-        kafkaTemplate.send(topic, msg);
-    }
     public void sendChangePriceMessage(PriceChangeModel msg, String topic){
         kafkaTemplate.send(topic, msg);
     }
