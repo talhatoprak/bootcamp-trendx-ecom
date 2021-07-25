@@ -23,8 +23,8 @@ public class SubscriptionService {
         this.kafkaService = kafkaService;
     }
 
-    public Subscription getSubscriptionByUserId(String userId) {
-        return repository.findById(userId).orElseThrow(RuntimeException::new);
+    public Subscription getSubscriptionByProductId(String productId) {
+        return repository.findById(productId).orElseThrow(RuntimeException::new);
     }
     public Set<String> getUsersByProductId(String productId){
         Subscription subscription=repository.findById(productId).orElse(null);
@@ -41,7 +41,7 @@ public class SubscriptionService {
     }
 
     public Subscription unfollowProduct(String userId, String productId) {
-        Subscription subscription = getSubscriptionByUserId(productId);
+        Subscription subscription = getSubscriptionByProductId(productId);
         subscription.unfollowProduct(userId);
         if (subscription.getFollowerUserIds().isEmpty()) {
             repository.deleteById(productId);
@@ -50,23 +50,21 @@ public class SubscriptionService {
         return repository.save(subscription);
     }
 
-    public List<Subscription> getAllSubscriptions()
-    {
+    public List<Subscription> getAllSubscriptions() {
          List<Subscription> subscriptions = repository.findAll();
          return subscriptions;
     }
-    public void deleteUserFromSubscriptionsSet(String userId)
-    {
+
+    public void deleteUserFromSubscriptionsSet(String userId) {
         List<Subscription> subscriptions = getAllSubscriptions();
-        for(Subscription subscription:subscriptions)
-        {
+        for(Subscription subscription:subscriptions) {
             subscription.unfollowProduct(userId);
             repository.save(subscription);
         }
 
     }
 
-    public void listenChangeSalesPrice(PriceChangeModel model){
+    public void listenChangeSalesPrice(PriceChangeModel model) {
         //get Product Info From Product Service
         Product product=productClientService.getProductById(model.getProductId());
         //getUsersByProductId
@@ -77,18 +75,22 @@ public class SubscriptionService {
             User user=userClientService.getUser(Long.parseLong(userId));
             if(user.getPlatform().equals("web") && model.getPlatform().equals("web")){
                 String subject="Takip Ettiğiniz Ürünün Fiyatı Değişti";
-                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi",product.getBarcode(),model.getNewPrice());
+                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi", product.getBarcode(),model.getNewPrice());
                 SendEmailModel notificationModel=new SendEmailModel(user.getEmail(),subject,content);
                 System.out.println(notificationModel);
                 kafkaService.sendMessage(notificationModel,"sendEmailNotification");
             }
             if(user.getPlatform().equals("mobil") && model.getPlatform().equals("mobil")){
                 String title="Takip Ettiğiniz Ürünün Fiyatı Değişti";
-                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi",product.getBarcode(),model.getNewPrice());
+                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi", product.getBarcode(),model.getNewPrice());
                 SendNotificationModel notificationModel=new SendNotificationModel(user.getId(),title,content);
                 System.out.println(notificationModel);
                 kafkaService.sendMessage(notificationModel,"sendMobileNotification");
             }
         }
+    }
+
+    public void deleteProduct(String productId) {
+        repository.deleteById(productId);
     }
 }

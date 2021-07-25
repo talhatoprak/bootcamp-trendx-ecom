@@ -14,8 +14,8 @@ import java.util.Map;
 public class KafkaTopicConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
-    @Value(value = "${kafka.topic}")
-    private String topic;
+    @Value(value = "${kafka.topic-delete-product}")
+    private String topicDeleteProduct;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -26,6 +26,6 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic topic1() {
-        return new NewTopic(topic, 1, (short) 1);
+        return new NewTopic(topicDeleteProduct, 1, (short) 1);
     }
 }

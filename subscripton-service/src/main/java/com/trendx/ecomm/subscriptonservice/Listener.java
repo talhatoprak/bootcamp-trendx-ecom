@@ -29,8 +29,9 @@ public class Listener {
         System.out.println(savedSubscription);
     }
 
-    @KafkaListener(topics = "deleteUser", groupId = "group-id", containerFactory = "kafkaListenerContainerFactoryString")
+    @KafkaListener(topics = "deleteProduct", groupId = "group-id", containerFactory = "kafkaListenerContainerFactoryString")
     public void listenDeleteProduct(String msg) {
+        subscriptionService.deleteProduct(msg);
         System.out.format("deleteUser: %s\n", msg);
     }
 
@@ -38,5 +39,15 @@ public class Listener {
     public void listenChangeSalesPrice(PriceChangeModel model) {
         subscriptionService.listenChangeSalesPrice(model);
         System.out.println(model);
+    }
+
+    @KafkaListener(topics = "deleteUser", groupId = "group-id", containerFactory = "kafkaListenerContainerFactoryString")
+    public void listenDeleteUser(String msg) {
+        System.out.format("deleteUser: %s\n", msg);
+        StringBuffer sb = new StringBuffer(msg);
+        sb.delete(msg.length() - 1, msg.length());
+        sb.delete(0, 1);
+
+        subscriptionService.deleteUserFromSubscriptionsSet(sb.toString());
     }
 }
