@@ -80,7 +80,7 @@ public class SubscriptionService {
                 System.out.println(notificationModel);
                 kafkaService.sendMessage(notificationModel,"sendEmailNotification");
             }
-            if(user.getPlatform().equals("mobil") && model.getPlatform().equals("mobil")){
+            if(user.getPlatform().equals("mobile") && model.getPlatform().equals("mobile")){
                 String title="Takip Ettiğiniz Ürünün Fiyatı Değişti";
                 String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi", product.getBarcode(),model.getNewPrice());
                 SendNotificationModel notificationModel=new SendNotificationModel(user.getId(),title,content);

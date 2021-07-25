@@ -20,14 +20,6 @@ public class Listener {
         this.subscriptionService = subscriptionService;
     }
 
-    @KafkaListener(topics = "${kafka.topic}", groupId = "group-id", containerFactory = "kafkaListenerContainerFactoryString")
-    public void listen(String msg) {
-        System.out.println(msg);
-        String[] data = msg.split(":");
-        Subscription savedSubscription = subscriptionService.followProduct(data[0], data[1]);
-        System.out.println(msg);
-        System.out.println(savedSubscription);
-    }
 
     @KafkaListener(topics = "deleteProduct", groupId = "group-id", containerFactory = "kafkaListenerContainerFactoryString")
     public void listenDeleteProduct(String msg) {

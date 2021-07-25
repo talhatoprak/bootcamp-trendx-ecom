@@ -29,5 +29,17 @@ public class ProductController {
         System.out.println(String.format("ProductController :: deleteById :: ProductId = %s",id));
         productService.deleteById(id);
     }
+    @PutMapping("/changeMobilePrice")
+    public  void changeMobileSalesPrice(@RequestParam String id,@RequestParam double price)
+    {
+        System.out.println(String.format("ProductController :: changeMobileSalesPrice :: ProductId = %s  price = %s",id,price));
+        productService.changeMobileSalesPrice(id,price);
+    }
+    @PutMapping("/changeWebPrice")
+    public  void changeWebSalesPrice(@RequestParam String id,@RequestParam double price)
+    {
+        System.out.println(String.format("ProductController :: changeWebSalesPrice :: ProductId = %s  price = %s",id,price));
+        productService.changeWebSalesPrice(id,price);
+    }
 
 }
