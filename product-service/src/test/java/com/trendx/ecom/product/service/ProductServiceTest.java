@@ -2,21 +2,30 @@ package com.trendx.ecom.product.service;
 
 
 import com.trendx.ecom.product.entity.Product;
+import com.trendx.ecom.product.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.CompositeIterator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ProductServiceTest {
 
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ProductServiceTest(ProductService productService) {
+    public ProductServiceTest(ProductService productService, ProductRepository productRepository) {
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @Test
@@ -108,4 +117,46 @@ public class ProductServiceTest {
         Product product1=productService.findByBarcode(barcode);
         assertEquals(product1.getSalesPrice(),newPrice);
     }
+
+    @Test
+    public void testDeleteProduct() {
+        //Given
+        Product product = new Product();
+        product.setBarcode("BR03");
+        product.setDescription("Tshirt");
+        product.setMobileSalesPrice(6);
+        product.setSalesPrice(6.6);
+
+        //When
+        product = productRepository.save(product);
+        String savedProductId = product.getId();
+        productService.deleteById(savedProductId);
+
+        //Then
+        Optional<Product> foundProduct = productRepository.findById(savedProductId);
+        assertTrue(foundProduct.isEmpty());
+    }
+
+    @Test
+    public void testFindAll() {
+        productRepository.deleteAll();
+        Product product = new Product();
+        product.setDescription("Tshirt");
+        product.setMobileSalesPrice(6);
+        product.setSalesPrice(6.6);
+        product.setBarcode("findAllTest0");
+
+        Product product2 = new Product();
+        product2.setDescription("Tshirt2");
+        product2.setMobileSalesPrice(16);
+        product2.setSalesPrice(16.6);
+        product2.setBarcode("findAllTest1");
+
+        productRepository.saveAll(Arrays.asList(product, product2));
+
+        List<Product> foundProducts = productService.findAll();
+        System.out.println(foundProducts.size());
+    }
+
+
 }

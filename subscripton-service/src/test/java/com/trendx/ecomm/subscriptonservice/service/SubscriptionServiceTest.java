@@ -6,11 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class SubscriptionServiceTest {
@@ -31,8 +30,17 @@ public class SubscriptionServiceTest {
         assertEquals(users.size(), 2);
     }
     @Test
-    public void getSubscriptionByUserId(){
-        Subscription subscription= subscriptionService.getSubscriptionByUserId("user1");
+    public void getSubscriptionByProductId(){
+        //Given
+        final String productId = "getSubscriptionTestprd1";
+        subscriptionService.followProduct("user1", productId);
+
+        //When
+        Subscription foundSubscription = subscriptionService.getSubscriptionByProductId(productId);
+
+        //Then
+        assertEquals(productId, foundSubscription.getProductId());
+
     }
 
     @Test

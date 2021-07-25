@@ -4,12 +4,16 @@ package com.trendx.ecom.product.service;
 import com.trendx.ecom.product.entity.Product;
 import com.trendx.ecom.product.kafkamodel.PriceChangeModel;
 import com.trendx.ecom.product.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductService {
+    @Value("${kafka.topic-delete-product}")
+    private String topicName;
+
     private final ProductRepository productRepository;
     private final KafkaService kafkaService;
 
@@ -63,7 +67,7 @@ public class ProductService {
 
     public void deleteById(String id) {
         productRepository.deleteById(id);
-        kafkaService.sendMessage(id, "deleteProduct");
+        kafkaService.sendMessage(id, topicName);
     }
 
     public void deleteByBarcode(String barcode) {
@@ -73,6 +77,6 @@ public class ProductService {
             return;
         Product product=productRepository.findByBarcode(barcode);
         productRepository.deleteByBarcode(barcode);
-        kafkaService.sendMessage(product.getId(), "deleteProduct");
+        kafkaService.sendMessage(product.getId(), topicName);
     }
 }
