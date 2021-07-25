@@ -21,7 +21,7 @@ class UserServiceTest {
     @Test
     void findById() {
         //Given
-        User user=new User("Talha Toprak", "t@t.com");
+        User user=new User("Talha Toprak", "t@t.com","web");
         userRepository.save(user);
 
         //When
@@ -34,7 +34,7 @@ class UserServiceTest {
     @Test
     void createUser() {
         //Given
-        User user = new User("Yavuz Bilgin", "y@y.com");
+        User user = new User("Yavuz Bilgin", "y2@y.com","mobil");
 
         //When
         User savedUser = userService.createUser(user);
@@ -47,7 +47,7 @@ class UserServiceTest {
     @Test
     void deleteById() {
         //Given
-        User user = new User("Ahmet Bilgin", "a@b.com");
+        User user = new User("Ahmet Bilgin", "a@b.com","mobil");
         User savedUser = userRepository.save(user);
         Long savedUserId = savedUser.getId();
 
@@ -62,7 +62,7 @@ class UserServiceTest {
     @Test
     void updateUser() {
         //Given
-        User user = new User("Ayse Oz", "a@o.com");
+        User user = new User("Ayse Oz", "a@o.com","web");
         User savedUser = userRepository.save(user);
 
         //When

@@ -1,6 +1,7 @@
 package com.trendx.ecomm.subscriptonservice.service;
 
 import com.trendx.ecomm.subscriptonservice.entity.Subscription;
+import com.trendx.ecomm.subscriptonservice.model.PriceChangeModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,23 +22,27 @@ public class SubscriptionServiceTest {
 
     @Test
     public void findByFollowedProductId(){
-        subscriptionService.followProduct("user1","prd1");
-        subscriptionService.followProduct("user1","prd2");
-        subscriptionService.followProduct("user1","prd3");
+        subscriptionService.followProduct("1","ffa3bed8-e9b1-48ec-9383-8f451767f14d");
+        subscriptionService.followProduct("3","ffa3bed8-e9b1-48ec-9383-8f451767f14d");
 
-        subscriptionService.followProduct("user2","prd1");
-        subscriptionService.followProduct("user2","prd2");
-        subscriptionService.followProduct("user2","prd4");
+        subscriptionService.followProduct("3","884c01af-eda6-41b8-adff-13074d1200ed");
 
-        subscriptionService.followProduct("user3","prd1");
-        subscriptionService.followProduct("user3","prd3");
-        subscriptionService.followProduct("user3","prd4");
-
-        Set<String> users=subscriptionService.getUsersByProductId("prd2");
+        Set<String> users=subscriptionService.getUsersByProductId("ffa3bed8-e9b1-48ec-9383-8f451767f14d");
         assertEquals(users.size(), 2);
     }
     @Test
     public void getSubscriptionByUserId(){
         Subscription subscription= subscriptionService.getSubscriptionByUserId("user1");
+    }
+
+    @Test
+    public void listenChangeSalesPrice(){
+        PriceChangeModel model=new PriceChangeModel();
+        model.setNewPrice(7);
+        model.setOldPrice(8);
+        model.setPlatform("mobil");
+        model.setProductId("ffa3bed8-e9b1-48ec-9383-8f451767f14d");
+
+        subscriptionService.listenChangeSalesPrice(model);
     }
 }
