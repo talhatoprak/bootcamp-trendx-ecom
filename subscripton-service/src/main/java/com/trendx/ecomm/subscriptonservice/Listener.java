@@ -2,9 +2,15 @@ package com.trendx.ecomm.subscriptonservice;
 
 import com.trendx.ecomm.subscriptonservice.entity.Subscription;
 import com.trendx.ecomm.subscriptonservice.model.PriceChangeModel;
+import com.trendx.ecomm.subscriptonservice.model.Product;
+import com.trendx.ecomm.subscriptonservice.model.SendEmailModel;
+import com.trendx.ecomm.subscriptonservice.model.User;
 import com.trendx.ecomm.subscriptonservice.service.SubscriptionService;
+import com.trendx.ecomm.subscriptonservice.service.UserClientService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class Listener {
@@ -30,8 +36,7 @@ public class Listener {
 
     @KafkaListener(topics = "changeSalesPrice", groupId = "group-id", containerFactory = "kafkaListenerContainerFactory")
     public void listenChangeSalesPrice(PriceChangeModel model) {
-        //getUsersByProductId
-        //sendNotification(user)
+        subscriptionService.listenChangeSalesPrice(model);
         System.out.println(model);
     }
 }

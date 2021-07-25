@@ -1,21 +1,26 @@
 package com.trendx.ecomm.subscriptonservice.service;
 
 import com.trendx.ecomm.subscriptonservice.entity.Subscription;
+import com.trendx.ecomm.subscriptonservice.model.*;
 import com.trendx.ecomm.subscriptonservice.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
     private final SubscriptionRepository repository;
+    private final UserClientService userClientService;
+    private final ProductClientService productClientService;
+    private final KafkaService kafkaService;
 
-    public SubscriptionService(SubscriptionRepository repository) {
+    public SubscriptionService(SubscriptionRepository repository, UserClientService userClientService, ProductClientService productClientService, KafkaService kafkaService) {
         this.repository = repository;
+        this.userClientService = userClientService;
+        this.productClientService = productClientService;
+        this.kafkaService = kafkaService;
     }
 
     public Subscription getSubscriptionByUserId(String userId) {
@@ -43,5 +48,47 @@ public class SubscriptionService {
             return subscription;
         }
         return repository.save(subscription);
+    }
+
+    public List<Subscription> getAllSubscriptions()
+    {
+         List<Subscription> subscriptions = repository.findAll();
+         return subscriptions;
+    }
+    public void deleteUserFromSubscriptionsSet(String userId)
+    {
+        List<Subscription> subscriptions = getAllSubscriptions();
+        for(Subscription subscription:subscriptions)
+        {
+            subscription.unfollowProduct(userId);
+            repository.save(subscription);
+        }
+
+    }
+
+    public void listenChangeSalesPrice(PriceChangeModel model){
+        //get Product Info From Product Service
+        Product product=productClientService.getProductById(model.getProductId());
+        //getUsersByProductId
+        Set<String> users=getUsersByProductId(model.getProductId());
+        //sendNotification(user)
+        for (String userId:users) {
+            //GetUserInfo
+            User user=userClientService.getUser(Long.parseLong(userId));
+            if(user.getPlatform().equals("web") && model.getPlatform().equals("web")){
+                String subject="Takip Ettiğiniz Ürünün Fiyatı Değişti";
+                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi",product.getBarcode(),model.getNewPrice());
+                SendEmailModel notificationModel=new SendEmailModel(user.getEmail(),subject,content);
+                System.out.println(notificationModel);
+                kafkaService.sendMessage(notificationModel,"sendEmailNotification");
+            }
+            if(user.getPlatform().equals("mobil") && model.getPlatform().equals("mobil")){
+                String title="Takip Ettiğiniz Ürünün Fiyatı Değişti";
+                String content=String.format("Takip ettiğiniz %s ürünün fiyatı %s olarak değiştirildi",product.getBarcode(),model.getNewPrice());
+                SendNotificationModel notificationModel=new SendNotificationModel(user.getId(),title,content);
+                System.out.println(notificationModel);
+                kafkaService.sendMessage(notificationModel,"sendMobileNotification");
+            }
+        }
     }
 }
